@@ -262,12 +262,13 @@ router.post("/:invoiceId/edit", async (req, res) => {
   if(invoice_status === "void") {
     await query("UPDATE invoices SET state = 'void' WHERE id = $1", [invoiceId]);
   }
+
+  // Get updated invoice details
+  invoice = await query("SELECT * FROM invoices WHERE id = $1", [invoiceId]);
   
   // Trigger Webhook: invoice.updated
   WebhookService.trigger(invoice.business_id, 'invoice.updated', invoice);
   
-  res.status(200).json({ status: 'success', invoice: { ...invoice } });
-
   res.status(200).json({ status: 'success', invoice: { ...invoice } });
 })
 
