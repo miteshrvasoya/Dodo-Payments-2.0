@@ -148,6 +148,12 @@ router.post("/:invoiceId/pay", async (req, res) => {
       return;
     }
 
+    if (invoice.state === 'void') {
+      await query('ROLLBACK');
+      res.status(409).json({ status: 'success', message: 'Invoice is already void', invoice });
+      return;
+    }
+
     // 2. Check for existing payment (Idempotency)
     const paymentCheck = await query(
       'SELECT * FROM payments WHERE invoice_id = $1 AND idempotency_key = $2',
@@ -245,6 +251,9 @@ router.post("/:invoiceId/pay", async (req, res) => {
 
 router.post("/:invoiceId/edit", async (req, res) => {
   const { invoiceId } = req.params;
+
+  console.log("invoiceId: ", invoiceId);
+
   let { invoice_status } = req.body;
 
   // Fetch Invoice details
@@ -254,6 +263,13 @@ router.post("/:invoiceId/edit", async (req, res) => {
     return;
   }
 
+  // Check if already paid
+  if(invoice.rows[0].state === "paid") {
+    res.status(400).json({ status: 'error', message: 'Invoice is already paid' });
+    return;
+  }
+
+  // Check if already void
   if(invoice.rows[0].state === "void") {
     res.status(400).json({ status: 'error', message: 'Invoice is already void' });
     return;
@@ -267,9 +283,9 @@ router.post("/:invoiceId/edit", async (req, res) => {
   invoice = await query("SELECT * FROM invoices WHERE id = $1", [invoiceId]);
   
   // Trigger Webhook: invoice.updated
-  WebhookService.trigger(invoice.business_id, 'invoice.updated', invoice);
+  WebhookService.trigger(invoice.business_id, 'invoice.updated', invoice.rows[0]);
   
-  res.status(200).json({ status: 'success', invoice: { ...invoice } });
+  res.status(200).json({ status: 'success', invoice: invoice.rows[0] });
 })
 
 export default router;

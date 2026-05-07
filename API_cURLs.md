@@ -92,9 +92,7 @@ curl -X POST http://localhost:3000/invoices/<invoice_id>/pay \
   -H "idempotency-key: pay_demo_12345" \
   -d '{
     "payment_method": "card",
-    "card_number": "tok_success",
-    "card_exp": "12/26",
-    "card_cvv": "123"
+    "card_token": "tok_success"
   }'
 ```
 
