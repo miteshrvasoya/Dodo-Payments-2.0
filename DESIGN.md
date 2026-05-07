@@ -212,7 +212,7 @@ High-level flow:
 
 ## (a) Two concurrent payment requests
 
-Only one request acquires the invoice lock first. The second request waits until the first commits.
+When 2 client request comes for the payment of same invoice, Only one request acquires the invoice lock first. The second request waits until the first commits.
 
 After the first request completes:
 

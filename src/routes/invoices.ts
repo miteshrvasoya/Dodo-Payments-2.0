@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { query } from '../db/connection';
 import { WebhookService } from '../services/webhook.service';
+import crypto from 'crypto';
 
 const router = Router();
 
@@ -158,6 +159,8 @@ router.post("/:invoiceId/pay", async (req, res) => {
       res.status(409).json({ status: 'success', message: 'Payment already processed', payment: paymentCheck.rows[0] });
       return;
     }
+    // Generate request_hash (Idempotency Key + Payment request data)
+    const request_hash = crypto.createHash('sha256').update(JSON.stringify(req.body)).digest('hex');
 
     // Store Payment record with Pending status
     const paymentId = uuidv4();
@@ -169,7 +172,7 @@ router.post("/:invoiceId/pay", async (req, res) => {
       paymentId,
       invoiceId,
       idempotency_key,
-      '', // Simplified hash
+      request_hash,
       'pending',
       ''  
     ]);
