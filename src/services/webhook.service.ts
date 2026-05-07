@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { query } from '../db/connection';
 import { logger } from '../utils/logger';
 
-export type WebhookEvent = 'invoice.created' | 'invoice.paid' | 'invoice.payment_failed';
+export type WebhookEvent = 'invoice.created' | 'invoice.paid' | 'invoice.payment_failed' | 'invoice.updated';
 
 export class WebhookService {
   /**

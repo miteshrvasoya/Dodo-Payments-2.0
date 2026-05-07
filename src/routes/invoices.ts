@@ -243,4 +243,32 @@ router.post("/:invoiceId/pay", async (req, res) => {
   }
 });
 
+router.post("/:invoiceId/edit", async (req, res) => {
+  const { invoiceId } = req.params;
+  let { invoice_status } = req.body;
+
+  // Fetch Invoice details
+  let invoice: any = await query("SELECT * FROM invoices WHERE id = $1", [invoiceId]);
+  if (!invoice || invoice.rows.length === 0) {
+    res.status(404).json({ status: 'error', message: 'Invoice not found' });
+    return;
+  }
+
+  if(invoice.rows[0].state === "void") {
+    res.status(400).json({ status: 'error', message: 'Invoice is already void' });
+    return;
+  }
+  
+  if(invoice_status === "void") {
+    await query("UPDATE invoices SET state = 'void' WHERE id = $1", [invoiceId]);
+  }
+  
+  // Trigger Webhook: invoice.updated
+  WebhookService.trigger(invoice.business_id, 'invoice.updated', invoice);
+  
+  res.status(200).json({ status: 'success', invoice: { ...invoice } });
+
+  res.status(200).json({ status: 'success', invoice: { ...invoice } });
+})
+
 export default router;
