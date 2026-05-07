@@ -97,3 +97,15 @@ curl -X POST http://localhost:3000/invoices/<invoice_id>/pay \
     "card_cvv": "123"
   }'
 ```
+
+### Edit Invoice
+Updates an invoice status to 'void'.
+```bash
+# Replace <invoice_id> with a real UUID
+curl -X POST http://localhost:3000/invoices/<invoice_id>/edit \
+  -H "Authorization: Bearer whsec_acme_secret_123" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "invoice_status": "void"
+  }'
+```
