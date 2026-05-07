@@ -19,7 +19,6 @@ docker compose -f docker-compose.dev.yml up --build
 ```
 
 **Access Points:**
-- **Frontend Dashboard**: [http://localhost:5173](http://localhost:5173) (Dev Tooling)
 - **API Server**: [http://localhost:3000](http://localhost:3000)
 - **Mock PSP**: [http://localhost:3001](http://localhost:3001)
 

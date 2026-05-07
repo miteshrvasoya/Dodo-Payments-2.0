@@ -10,6 +10,8 @@ Used mainly for:
 * validating concurrency handling approaches
 * structuring DESIGN.md
 * generating initial boilerplate prompts for project setup
+* Implementation of test file for concurrency test
+
 
 ---
 
@@ -23,6 +25,8 @@ Used for:
 * Docker configuration setup
 * repetitive CRUD handler generation
 * autocomplete during implementation
+* Prepared relevant Markdown files
+
 
 ---
 
