@@ -143,7 +143,7 @@ router.post("/:invoiceId/pay", async (req, res) => {
     const invoice = invoiceResult.rows[0];
     if (invoice.state === 'paid') {
       await query('ROLLBACK');
-      res.status(200).json({ status: 'success', message: 'Invoice is already paid', invoice });
+      res.status(409).json({ status: 'success', message: 'Invoice is already paid', invoice });
       return;
     }
 
@@ -155,7 +155,7 @@ router.post("/:invoiceId/pay", async (req, res) => {
 
     if (paymentCheck && paymentCheck.rows.length > 0) {
       await query('ROLLBACK');
-      res.status(200).json({ status: 'success', message: 'Payment already processed', payment: paymentCheck.rows[0] });
+      res.status(409).json({ status: 'success', message: 'Payment already processed', payment: paymentCheck.rows[0] });
       return;
     }
 

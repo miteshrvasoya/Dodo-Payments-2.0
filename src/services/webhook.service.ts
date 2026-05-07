@@ -85,9 +85,9 @@ export class WebhookService {
   }
 
   private static scheduleRetry(webhook: any, eventType: string, payload: any, nextRetryCount: number) {
-    // Exponential backoff: 10s, 1m, 5m, 30m, 2h
-    const backoffs = [10000, 60000, 300000, 1800000, 7200000];
-    const delay = backoffs[nextRetryCount - 1] || 7200000;
+    // Exponential backoff: 1s, 5s, 30s
+    const backoffs = [1000, 5000, 30000];
+    const delay = backoffs[nextRetryCount - 1] || 16000;
 
     logger.info(`Scheduling webhook retry ${nextRetryCount} in ${delay}ms for ${webhook.id}`);
     
