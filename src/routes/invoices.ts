@@ -154,10 +154,25 @@ router.post("/:invoiceId/pay", async (req, res) => {
       return;
     }
 
+    // Generate request_hash (Idempotency Key + Payment request data)
+    const request_hash = crypto.createHash('sha256').update(JSON.stringify(req.body)).digest('hex');
+
+    // Check request_hash (Idempotency)
+    const requestCheck = await query(
+      'SELECT * FROM payments WHERE invoice_id = $1 AND request_hash = $2',
+      [invoiceId, request_hash]
+    );
+
+    if (requestCheck && requestCheck.rows.length > 0) {
+      await query('ROLLBACK');
+      res.status(409).json({ status: 'success', message: 'Payment already processed', payment: requestCheck.rows[0] });
+      return;
+    }
+
     // 2. Check for existing payment (Idempotency)
     const paymentCheck = await query(
-      'SELECT * FROM payments WHERE invoice_id = $1 AND idempotency_key = $2',
-      [invoiceId, idempotency_key]
+      'SELECT * FROM payments WHERE invoice_id = $1 AND idempotency_key = $2 AND status = $3',
+      [invoiceId, idempotency_key, 'success']
     );
 
     if (paymentCheck && paymentCheck.rows.length > 0) {
@@ -165,8 +180,8 @@ router.post("/:invoiceId/pay", async (req, res) => {
       res.status(409).json({ status: 'success', message: 'Payment already processed', payment: paymentCheck.rows[0] });
       return;
     }
-    // Generate request_hash (Idempotency Key + Payment request data)
-    const request_hash = crypto.createHash('sha256').update(JSON.stringify(req.body)).digest('hex');
+
+    
 
     // Store Payment record with Pending status
     const paymentId = uuidv4();

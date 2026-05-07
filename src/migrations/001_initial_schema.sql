@@ -50,8 +50,7 @@ CREATE TABLE payments (
   status VARCHAR(20) NOT NULL,
   psp_reference VARCHAR(255),
   failure_code VARCHAR(100),
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  UNIQUE(invoice_id, idempotency_key)
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_payments_invoice_id ON payments(invoice_id);

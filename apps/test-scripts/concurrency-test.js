@@ -8,10 +8,10 @@ async function run() {
   for (let i = 0; i < TOTAL_REQUESTS; i++) {
     requests.push(
       axios.post(
-        'http://localhost:3000/invoices/170bcda3-deae-4e67-b098-4299b1781def/pay',
+        'http://localhost:3000/invoices/dfcb20e6-3f79-42d6-88b3-e71e1560c347/pay',
         {
           card_token: 'tok_success'
-          
+
         },
         {
           headers: {
