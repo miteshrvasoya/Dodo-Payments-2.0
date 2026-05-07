@@ -65,6 +65,8 @@ export class WebhookService {
         [deliveryId, webhook.id, eventType, body, status, retryCount]
       );
 
+      logger.info(`Webhook delivered to ${webhook.endpoint_url} with status ${status}`);
+
       if (!response.ok && retryCount < 5) {
         this.scheduleRetry(webhook, eventType, payload, retryCount + 1);
       }

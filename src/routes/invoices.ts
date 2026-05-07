@@ -117,10 +117,10 @@ router.get('/', async (req, res) => {
 
 router.post("/:invoiceId/pay", async (req, res) => {
   const { invoiceId } = req.params;
-  const { payment_method, card_number, card_exp, card_cvv } = req.body;
+  const { card_token } = req.body;
   const idempotency_key = req.headers['idempotency-key'] as string;
 
-  if (!invoiceId || !payment_method || !card_number || !card_exp || !card_cvv) {
+  if (!invoiceId || !card_token) {
     res.status(400).json({ status: 'error', message: 'Missing required payment fields' });
     return;
   }
@@ -182,7 +182,7 @@ router.post("/:invoiceId/pay", async (req, res) => {
     const pspResponse = await fetch(pspUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: card_number })
+      body: JSON.stringify({ token: card_token })
     });
 
     const pspData: any = await pspResponse.json();

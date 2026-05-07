@@ -8,9 +8,11 @@
     "start:invoice": "node dist/src/index.js",
     "start:psp": "node dist/apps/mock-psp/index.js",
     "dev:invoice": "nodemon --legacy-watch --watch src --ext ts,json --exec 'tsx src/index.ts'",
-    "dev:psp": "nodemon --legacy-watch --watch apps/mock-psp --ext ts,json --exec 'tsx apps/mock-psp/index.ts'"
+    "dev:psp": "nodemon --legacy-watch --watch apps/mock-psp --ext ts,json --exec 'tsx apps/mock-psp/index.ts'",
+    "test:concurrency": "node apps/test-scripts/concurrency-test.js"
   },
   "dependencies": {
+    "axios": "^1.16.0",
     "cors": "^2.8.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
