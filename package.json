@@ -1,0 +1,29 @@
+{
+  "name": "dodo-payments-assignment",
+  "version": "1.0.0",
+  "description": "Dodo Payments Take-Home Project",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start:invoice": "node dist/src/index.js",
+    "start:psp": "node dist/apps/mock-psp/index.js",
+    "dev:invoice": "nodemon --legacy-watch --watch src --ext ts,json --exec 'tsx src/index.ts'",
+    "dev:psp": "nodemon --legacy-watch --watch apps/mock-psp --ext ts,json --exec 'tsx apps/mock-psp/index.ts'"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "uuid": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "@types/pg": "^8.11.6",
+    "nodemon": "^3.1.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.3"
+  }
+}

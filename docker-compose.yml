@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: dodo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  invoice-service:
+    build:
+      context: .
+      dockerfile: docker/invoice-service.Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgres://postgres:root@postgres:5432/dodo
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  mock-psp:
+    build:
+      context: .
+      dockerfile: docker/mock-psp.Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+
+volumes:
+  postgres_data:
