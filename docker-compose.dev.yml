@@ -48,15 +48,4 @@ services:
       - ./apps:/app/apps
       - /app/node_modules
 
-  frontend:
-    build:
-      context: .
-      dockerfile: docker/frontend.dev.Dockerfile
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./apps/frontend/src:/app/frontend/src
-      - ./apps/frontend/index.html:/app/frontend/index.html
-      - ./apps/frontend/vite.config.ts:/app/frontend/vite.config.ts
-      - /app/frontend/node_modules
 

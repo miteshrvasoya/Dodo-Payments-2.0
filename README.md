@@ -18,6 +18,14 @@ The project is fully containerized. For the best development experience with hot
 docker compose -f docker-compose.dev.yml up --build
 ```
 
+## 🚀 Quick Start (Production Mode)
+
+The project is fully containerized. For production use the following command:
+
+```powershell
+docker compose up --build
+```
+
 **Access Points:**
 - **API Server**: [http://localhost:3000](http://localhost:3000)
 - **Mock PSP**: [http://localhost:3001](http://localhost:3001)
@@ -32,11 +40,6 @@ docker compose -f docker-compose.dev.yml up --build
 - **Webhook System**: Signed deliveries (HMAC-SHA256) with asynchronous retries and exponential backoff.
 - **Mock PSP Testing**: Granular control over payment outcomes (Success, Decline, Timeout, Network Error).
 - **Persistent Storage**: Configured with bind mounts to ensure data persists even after container removals.
-
----
-
-## 🌐 Frontend (Internal Dev Tool)
-The included Frontend application is built strictly as a **Development Utility** to allow for easy interaction with the API and manual testing of the payment flows. It is not intended as a production-facing merchant dashboard.
 
 ---
 
